@@ -1,0 +1,141 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Definition for fields used in the logger message processor",
+  "type": "object",
+  "properties": {
+    "priority": {
+      "type": "string",
+      "javaType": "org.mule.extension.jsonlogger.api.pojos.Priority",
+      "enum": [
+        "DEBUG",
+        "TRACE",
+        "INFO",
+        "WARN",
+        "ERROR"
+      ],
+      "sdk": {
+        "default": "INFO",
+        "summary": "Logger priority"
+      }
+    },
+    "tracePoint": {
+      "type": "string",
+      "javaType": "org.mule.extension.jsonlogger.api.pojos.TracePoint",
+      "enum": [
+        "START",
+        "BEFORE_TRANSFORM",
+        "AFTER_TRANSFORM",
+        "BEFORE_REQUEST",
+        "AFTER_REQUEST",
+        "FLOW",
+        "END",
+        "EXCEPTION"
+      ],
+      "sdk": {
+        "default": "START",
+        "summary": "Current processing stage"
+      }
+    },
+    "correlationId": {
+      "type": "string",
+      "sdk": {
+        "default": "#[attributes.headers.correlationId]",
+         "expressionSupport": "SUPPORTED",
+         "required": false
+      }
+    },
+       "logMessage": {
+      "type": "string",
+      "sdk": {
+        "expressionSupport": "SUPPORTED",
+        "example": "Add a log entry",
+        "required": false,
+        "summary": "Message to be logged"
+      }
+    },
+    "orginationUserId": {
+      "type": "string",
+      "sdk": {
+        "default": "#[attributes.headers.originationUserId default \"\"]",
+        "expressionSupport": "SUPPORTED",
+        "required": false
+      }
+    },
+     "orginationSystemId": {
+      "type": "string",
+      "sdk": {
+        "default": "#[attributes.headers.originationSystemId default \"\"]",
+        "expressionSupport": "SUPPORTED",
+        "required": false
+      }
+    },
+        "messageId": {
+      "type": "string",
+      "sdk": {
+        "default": "",
+        "expressionSupport": "SUPPORTED",
+        "required": false
+      }
+    },
+  
+    "errorDetail": {
+      "type": "object",
+      "javaType": "org.mule.extension.jsonlogger.api.pojos.ExceptionDetail",
+      "properties": {
+        "description": {
+          "type": "string",
+          "sdk": {
+            "default": "#[error.description default \"\"]",
+            "summary": "exception description details",
+            "expressionSupport": "SUPPORTED",
+            "required": true
+          }
+        },
+        "type": {
+          "type": "string",
+          "sdk": {
+            "default": "#[error.errorType.namespace default \"\" ++ \":\" ++ error.errorType.identifier default \"\"]",
+            "summary": "error type",
+            "expressionSupport": "SUPPORTED",
+            "required": false
+          }
+        },
+        "message": {
+          "type": "string",
+          "sdk": {
+            "default": "#[error.detailedDescription default \"\"]",
+            "summary": "error message",
+            "expressionSupport": "SUPPORTED",
+            "required": false
+          }
+        },
+         "stackTrace": {
+          "type": "string",
+          "sdk": {
+            "default": "#[error.cause.stackTrace as String default \"\" ]",
+            "summary": "error message",
+            "expressionSupport": "SUPPORTED",
+            "required": false
+          }
+        },
+        "errorCode": {
+          "type": "string",
+          "sdk": {
+            "summary": "unique error code",
+            "expressionSupport": "SUPPORTED",
+            "required": false
+          }
+        }
+      },
+      "sdk": {
+        "expressionSupport": "NOT_SUPPORTED",
+        "displayName" : "Exception Configuration",
+        "required" : false,
+        "parameterDsl" : {
+          "allowReferences" : false
+        }
+      }
+    }
+ 
+  }
+}

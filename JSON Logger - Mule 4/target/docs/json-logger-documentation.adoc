@@ -1,0 +1,125 @@
+:toc:               left
+:toc-title:         JSON Logger Module
+:toclevels:         2
+:last-update-label!:
+:docinfo:
+:source-highlighter: coderay
+:icons: font
+
+
+= JSON Logger Module Documentation Reference
+
++++
+This is the main class of an extension, is the entry point from which configurations, connection providers, operations and sources are going to be declared.
++++
+
+
+== Configurations
+---
+[[config]]
+=== Config
+
++++
+Default configuration
++++
+
+==== Parameters
+[cols=".^20%,.^20%,.^35%,.^20%,^.^5%", options="header"]
+|======================
+| Name | Type | Description | Default Value | Required
+|Name | String | The name for this configuration. Connectors reference the configuration with this name. | | *x*{nbsp}
+| Expiration Policy a| <<ExpirationPolicy>> |  +++Configures the minimum amount of time that a dynamic configuration instance can remain idle before the runtime considers it eligible for expiration. This does not mean that the platform will expire the instance at the exact moment that it becomes eligible. The runtime will actually purge the instances when it sees it fit.+++ |  | {nbsp}
+| App Name a| String |  |  +++${json.logger.application.name}+++ | {nbsp}
+| App Version a| String |  |  +++${json.logger.application.version}+++ | {nbsp}
+| Env a| String |  |  +++${mule.env}+++ | {nbsp}
+| Server Name a| String |  |  +++${mule.env}+++ | {nbsp}
+| Pretty Print a| Boolean |  +++Indicate if log entries should be formatted or single line+++ |  +++true+++ | {nbsp}
+| Log Location Info a| Boolean |  +++Indicate if location information should be logged+++ |  +++true+++ | {nbsp}
+| Disabled Fields a| String |  +++Indicate which fields should be disabled from logging separated by comma. They should match the exact name given in loggerProcessor.json schema+++ |  | {nbsp}
+|======================
+
+
+==== Associated Operations
+* <<logger>> {nbsp}
+
+
+
+== Operations
+
+[[logger]]
+=== Logger
+`<json-logger:logger>`
+
++++
+Log a new entry
++++
+
+==== Parameters
+[cols=".^20%,.^20%,.^35%,.^20%,^.^5%", options="header"]
+|======================
+| Name | Type | Description | Default Value | Required
+| Configuration | String | The name of the configuration to use. | | *x*{nbsp}
+| Priority a| Enumeration, one of:
+
+** DEBUG
+** TRACE
+** INFO
+** WARN
+** ERROR |  +++Logger priority+++ |  +++INFO+++ | {nbsp}
+| Trace Point a| Enumeration, one of:
+
+** START
+** BEFORE_TRANSFORM
+** AFTER_TRANSFORM
+** BEFORE_REQUEST
+** AFTER_REQUEST
+** FLOW
+** END
+** EXCEPTION |  +++Current processing stage+++ |  +++START+++ | {nbsp}
+| Correlation Id a| String |  |  +++#[attributes.headers.correlationId]+++ | {nbsp}
+| Log Message a| String |  +++Message to be logged+++ |  | {nbsp}
+| Orgination User Id a| String |  |  +++#[attributes.headers.originationUserId default ""]+++ | {nbsp}
+| Orgination System Id a| String |  |  +++#[attributes.headers.originationSystemId default ""]+++ | {nbsp}
+| Message Id a| String |  |  ++++++ | {nbsp}
+| Exception Configuration a| <<ExceptionDetail>> |  |  | {nbsp}
+|======================
+
+
+==== For Configurations.
+* <<config>> {nbsp}
+
+
+
+
+== Types
+[[ExpirationPolicy]]
+=== Expiration Policy
+
+[cols=".^20%,.^25%,.^30%,.^15%,.^10%", options="header"]
+|======================
+| Field | Type | Description | Default Value | Required
+| Max Idle Time a| Number | A scalar time value for the maximum amount of time a dynamic configuration instance should be allowed to be idle before it's considered eligible for expiration |  | 
+| Time Unit a| Enumeration, one of:
+
+** NANOSECONDS
+** MICROSECONDS
+** MILLISECONDS
+** SECONDS
+** MINUTES
+** HOURS
+** DAYS | A time unit that qualifies the maxIdleTime attribute |  | 
+|======================
+
+[[ExceptionDetail]]
+=== Exception Detail
+
+[cols=".^20%,.^25%,.^30%,.^15%,.^10%", options="header"]
+|======================
+| Field | Type | Description | Default Value | Required
+| Description a| String |  | #[error.description default ""] | 
+| Type a| String |  | #[error.errorType.namespace default "" ++ ":" ++ error.errorType.identifier default ""] | 
+| Message a| String |  | #[error.detailedDescription default ""] | 
+| Stack Trace a| String |  | #[error.cause.stackTrace as String default "" ] | 
+| Error Code a| String |  |  | 
+|======================
+
